@@ -1,0 +1,11 @@
+1. delete following line in config/prod.exs:
+
+  import_config "prod.secret.exs"
+
+2. replace `use Mix.Config` with `import Config`.
+
+3. modify mix.exs according following links:
++ https://hexdocs.pm/mix/Mix.Tasks.Release.html#module-umbrellas
++ https://hexdocs.pm/mix/Mix.Tasks.Release.html#module-customization
+
+That's all.
