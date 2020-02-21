@@ -1,6 +1,8 @@
 defmodule PhxCustom.MixProject do
   use Mix.Project
 
+  @repo_url "https://github.com/c4710n/phx_custom"
+
   def project do
     [
       app: :phx_custom,
@@ -36,7 +38,10 @@ defmodule PhxCustom.MixProject do
     [
       files: ~w(lib priv mix.exs .formatter.exs README*),
       exclude_patterns: [".DS_Store", "priv/example-projects"],
-      licenses: ["MIT"]
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => @repo_url
+      }
     ]
   end
 end
