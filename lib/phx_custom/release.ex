@@ -1,4 +1,4 @@
-defmodule PhxCustom.Config do
+defmodule PhxCustom.Release do
   alias PhxCustom.Project
   alias PhxCustom.Generator
   alias PhxCustom.Reporter

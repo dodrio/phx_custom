@@ -1,17 +1,17 @@
-defmodule Mix.Tasks.Phx.Custom.Config do
-  @shortdoc "Patch project with custom config template"
+defmodule Mix.Tasks.Phx.Custom.Release do
+  @shortdoc "Patch project for using `mix release`"
 
   @moduledoc """
   #{@shortdoc}.
 
-      mix phx.custom.config <project>
+      mix phx.custom.release <project>
 
   """
 
   use Mix.Task
 
   alias PhxCustom.CLI
-  alias PhxCustom.Config
+  alias PhxCustom.Release
 
   @impl Mix.Task
   def run(args) do
@@ -21,6 +21,6 @@ defmodule Mix.Tasks.Phx.Custom.Config do
 
   def process({project_root, _}) do
     root = Path.expand(project_root, File.cwd!())
-    Config.patch(root)
+    Release.patch(root)
   end
 end
