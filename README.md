@@ -9,7 +9,6 @@ phx_custom provides following Mix tasks:
 - `mix phx.custom.web`
 - `mix phx.custom.release`
 - `mix phx.custom.docker`
-- `mix phx.custom.yarn`
 
 ## Installation
 
@@ -41,7 +40,6 @@ $ mix phx.custom.web .
 
 # install dependencies
 $ mix deps.get
-$ mix phx.custom.yarn .
 
 # patch project for using `mix release`
 $ mix phx.custom.release .
