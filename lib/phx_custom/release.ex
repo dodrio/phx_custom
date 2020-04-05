@@ -7,7 +7,7 @@ defmodule PhxCustom.Release do
 
   def patch(root) do
     assigns = Project.inspect(root)
-    template_base = Path.expand("templates/config", :code.priv_dir(@app))
+    template_base = Path.expand("templates/release", :code.priv_dir(@app))
 
     Generator.delete(
       [
@@ -17,7 +17,7 @@ defmodule PhxCustom.Release do
     )
 
     Generator.copy_file(
-      Path.join(template_base, "_config/releases.exs"),
+      Path.join(template_base, "config/releases.exs"),
       Path.join(root, "config/releases.exs"),
       assigns
     )
