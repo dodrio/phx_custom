@@ -17,7 +17,7 @@ ARG WEB_ASSETS_DIR=${APP_WEB_DIR}/assets
 
 
 # > Base image with compiling deps
-FROM elixir:1.9-alpine AS base
+FROM elixir:1.10-alpine AS base
 
 # args
 ARG MIX_ENV
@@ -87,7 +87,7 @@ RUN mix release
 
 
 # > Final
-FROM elixir:1.9-alpine
+FROM elixir:1.10-alpine
 
 # args
 ARG MIX_ENV
@@ -110,6 +110,10 @@ COPY --from=release-assembler $WORK_DIR/_build/$MIX_ENV ./
 # limit permissions
 RUN chown -R nobody:nobody $WORK_DIR
 USER nobody
+
+# health check
+HEALTHCHECK --start-period=30s --interval=30s --timeout=3s \
+  CMD wget -q -O /dev/null http://localhost:$PORT/ || exit 1
 
 EXPOSE $PORT
 ENTRYPOINT ./rel/$RELEASE_NAME/bin/$RELEASE_NAME start
