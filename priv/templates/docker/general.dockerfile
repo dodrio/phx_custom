@@ -55,6 +55,12 @@ COPY $ASSETS_DIR/package.json $ASSETS_DIR/
 COPY $ASSETS_DIR/yarn.lock $ASSETS_DIR/
 RUN yarn --cwd $ASSETS_DIR install
 
+# copy source code
+# when buliding assets, analyzing eex files would be required.
+# in case of omitting files, we copy them all.
+COPY . ./
+
+# build
 COPY $ASSETS_DIR $ASSETS_DIR/
 RUN yarn --cwd $ASSETS_DIR deploy
 
@@ -66,7 +72,7 @@ FROM base AS release-assembler
 ARG WORK_DIR
 
 # compile
-COPY . .
+COPY . ./
 RUN mix compile
 
 # digest and compress assets

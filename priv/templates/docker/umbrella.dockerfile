@@ -62,6 +62,12 @@ COPY $WEB_ASSETS_DIR/package.json $WEB_ASSETS_DIR/
 COPY $WEB_ASSETS_DIR/yarn.lock $WEB_ASSETS_DIR/
 RUN yarn --cwd $WEB_ASSETS_DIR install
 
+# copy source code
+# when buliding assets, analyzing eex files would be required.
+# in case of omitting files, we copy them all.
+COPY . ./
+
+# build
 COPY $WEB_ASSETS_DIR $WEB_ASSETS_DIR/
 RUN yarn --cwd $WEB_ASSETS_DIR deploy
 
