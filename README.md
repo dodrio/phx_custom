@@ -5,6 +5,7 @@
 ## Dependencies
 
 - Node.js >= 9.11.2
+- Phoenix >= 1.5.0
 
 > Extractor of PurgeCSS is using a regular expression which is only compatible with Node.js 9.11.2.
 
@@ -15,6 +16,20 @@ phx_custom provides following Mix tasks:
 - `mix phx.custom.web`
 - `mix phx.custom.release`
 - `mix phx.custom.docker`
+
+### `mix phx.custom.web`
+
+This Mix task provides:
+
+- enhanced assets pipeline:
+  - built-in [tailwindcss](https://tailwindcss.com/) support
+  - source map support for JavaScript and CSS (only enable in dev environment)
+- separation for app and admin:
+  - standalone assets for app and admin frontend resources
+  - standalone namespaces for app and admin views
+
+> What is the meaning of app or admin?
+> Generally, a web application consists of two sub application, one for users, one for administrators. In the context of =phx_custom=, the code for users is called _app_, the code for administrators is called _admin_.
 
 ## Installation
 
