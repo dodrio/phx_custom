@@ -1,4 +1,5 @@
 /* eslint-env node */
+
 module.exports = function generateConfig(api) {
   api.cache(true)
 

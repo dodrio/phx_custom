@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="min-h-full">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin · Phoenix Framework</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/admin.css") %>" />
+    <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/admin.js") %>"></script>
   </head>
-  <body>
-    <nav class="navbar navbar-light bg-light mb-2 px-0">
-      <div class="container">
-        <a class="navbar-brand" href="/">Admin</a>
+  <body class="min-h-screen relative pb-12">
+    <header class="shadow">
+      <div class="container mx-auto px-4 py-3 mb-3">
+        <a class="brand" href="/">Admin</a>
       </div>
-    </nav>
-    <main role="main" class="container">
+    </header>
+    <main role="main" class="container mx-auto px-4">
       <% info = get_flash(@conn, :info) %>
       <%= if info do %>
         <p class="alert alert-info" role="alert"><%= info %></p>
@@ -24,8 +25,10 @@
         <p class="alert alert-danger" role="alert"><%= alert %></p>
       <% end %>
 
-      <%= render @view_module, @view_template, assigns %>
+      <%= @inner_content %>
     </main>
-    <script src="<%= Routes.static_path(@conn, "/js/admin.js") %>"></script>
+    <footer class="absolute left-0 bottom-0 w-full h-12 bg-gray-200 text-gray-700 flex justify-center items-center">
+      copyright
+    </footer>
   </body>
 </html>

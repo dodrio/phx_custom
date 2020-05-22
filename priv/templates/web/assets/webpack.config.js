@@ -2,121 +2,214 @@
 
 const path = require('path')
 const glob = require('glob')
-const sass = require('sass')
-const cssnano = require('cssnano')
-const autoprefixer = require('autoprefixer')
+
+// Webpack
+const merge = require('webpack-merge')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+// PostCSS
+const pcImport = require('postcss-import')
+const pcNested = require('postcss-nested')
+const pcAutoprefixer = require('autoprefixer')
+const pcPurgecss = require('@fullhuman/postcss-purgecss')
+
+// TailwindCSS
+const tailwindcss = require('tailwindcss')
+
+// Locations
+const srcStatic = resolveSrc('static/')
+const destRoot = resolveDest('./')
+const destJS = resolveDest('js/')
+const destCSS = resolveDest('css/')
+const destFont = resolveDest('fonts/')
+const destImage = resolveDest('images/')
+const publicFont = path.join('/', path.relative(destRoot, destFont))
+const publicImage = path.join('/', path.relative(destRoot, destImage))
+
 function resolveSrc(relativePath = '') {
   const root = path.resolve(__dirname)
-  const absolutePath = path.join(root, relativePath)
-
-  return absolutePath
+  const absPath = path.join(root, relativePath)
+  return absPath
 }
 
-const srcStatic = resolveSrc('static/')
-
-function resolvePublic(relativePath = '') {
+function resolveDest(relativePath = '') {
   const root = path.resolve(__dirname, '../priv/static')
-  const absolutePath = path.join(root, relativePath)
-
-  return absolutePath
+  const absPath = path.join(root, relativePath)
+  return absPath
 }
 
-const publicRoot = resolvePublic('./')
-const publicJS = resolvePublic('js/')
-const publicCSS = resolvePublic('css/')
-const publicFonts = resolvePublic('fonts/')
+// Webpack Configurations
+module.exports = (_env, { mode }) => {
+  const isProd = mode === 'production'
 
-module.exports = env => ({
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({ cache: true, parallel: true, sourceMap: false }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessor: cssnano,
-        cssProcessorPluginOptions: {
-          preset: ['default', { discardComments: { removeAll: true } }],
+  return merge([
+    loadJS(isProd),
+    loadCSS(isProd),
+    loadFont(),
+    loadImage(),
+    copyStatic(),
+  ])
+}
+
+function loadJS(isProd) {
+  return {
+    resolve: {
+      extensions: ['.js'],
+    },
+    entry: {
+      app: [].concat(
+        resolveSrc('app/index.js'),
+        glob.sync(resolveSrc('app/vendor/**/*.js')),
+        glob.sync(resolveSrc('vendor/**/*.js'))
+      ),
+      admin: [].concat(
+        resolveSrc('admin/index.js'),
+        glob.sync(resolveSrc('admin/vendor/**/*.js')),
+        glob.sync(resolveSrc('vendor/**/*.js'))
+      ),
+    },
+    output: {
+      filename: '[name].js',
+      path: destJS,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+          },
         },
+      ],
+    },
+    devtool: isProd ? 'nosources-source-map' : 'source-map',
+    optimization: {
+      minimizer: [
+        // sourceMap options only works with devtool options with following values:
+        // + source-map
+        // + inline-source-map
+        // + hidden-source-map
+        // + nosources-source-map
+        new TerserPlugin({ cache: true, parallel: true, sourceMap: !isProd }),
+      ],
+    },
+  }
+}
+
+function loadCSS(isProd) {
+  let pcPlugins = [pcImport, tailwindcss, pcNested, pcAutoprefixer]
+  if (isProd) {
+    pcPlugins = pcPlugins.concat(
+      pcPurgecss({
+        content: [
+          '../**/*.html.eex',
+          '../**/views/**/*.ex',
+          '../**/*.html.leex',
+          '../**/live/**/*.ex',
+          './app/**/*.js',
+          './admin/**/*.js',
+        ],
+        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+      })
+    )
+  }
+
+  return {
+    resolve: {
+      extensions: ['.css'],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
+            {
+              loader: MiniCSSExtractPlugin.loader,
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                ident: 'postcss',
+                plugins: pcPlugins,
+                sourceMap: true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    plugins: [
+      new MiniCSSExtractPlugin({
+        // path of CSS filename is relative to destJS
+        filename: path.join(path.relative(destJS, destCSS), '[name].css'),
       }),
     ],
-  },
-  devtool:
-    env === 'production'
-      ? 'nosources-source-map'
-      : 'cheap-module-eval-source-map',
-  resolve: {
-    extensions: ['.js', '.scss', '.css'],
-  },
-  entry: {
-    app: [resolveSrc('app/index.js')].concat(
-      glob.sync(resolveSrc('app/vendor/**/*.js'))
-    ),
-    admin: [resolveSrc('admin/index.js')].concat(
-      glob.sync(resolveSrc('admin/vendor/**/*.js'))
-    ),
-  },
-  output: {
-    filename: '[name].js',
-    path: publicJS,
-  },
-  plugins: [
-    // path of filename is relative to priv/static/js
-    new MiniCSSExtractPlugin({
-      // filename must be a relative path, crap!
-      filename: path.relative(publicJS, publicCSS) + '/[name].css',
-    }),
-    new CopyWebpackPlugin([{ from: srcStatic, to: publicRoot }]),
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
+    optimization: {
+      minimizer: [new OptimizeCSSAssetsPlugin({})],
+    },
+  }
+}
+
+function loadFont() {
+  return {
+    module: {
+      rules: [
+        {
+          test: /\.(eot|woff|woff2|ttf)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: path.relative(destJS, destFont),
+                publicPath: publicFont,
+              },
+            },
+          ],
         },
-      },
-      {
-        test: /\.css$/,
-        use: [MiniCSSExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /\.scss|\.sass$/,
-        use: [
-          MiniCSSExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: [autoprefixer()],
+      ],
+    },
+  }
+}
+
+function loadImage() {
+  return {
+    module: {
+      rules: [
+        {
+          test: /\.(png|jpe?g|gif|svg)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: path.relative(destJS, destImage),
+                publicPath: publicImage,
+              },
             },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              implementation: sass,
-              sourceMap: true,
-              sourceMapContents: false,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(eot|woff|woff2|ttf|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: path.relative(publicJS, publicFonts),
-              publicPath: '/fonts',
-            },
-          },
-        ],
-      },
+          ],
+        },
+      ],
+    },
+  }
+}
+
+function copyStatic() {
+  return {
+    plugins: [
+      new CopyWebpackPlugin({
+        patterns: [{ from: srcStatic, to: destRoot }],
+      }),
     ],
-  },
-})
+  }
+}
