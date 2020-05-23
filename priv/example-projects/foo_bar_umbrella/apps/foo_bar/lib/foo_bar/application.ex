@@ -7,7 +7,12 @@ defmodule FooBar.Application do
 
   def start(_type, _args) do
     children = [
-      FooBar.Repo
+      # Start the Ecto repository
+      FooBar.Repo,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: FooBar.PubSub}
+      # Start a worker by calling: FooBar.Worker.start_link(arg)
+      # {FooBar.Worker, arg}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: FooBar.Supervisor)

@@ -60,7 +60,7 @@ config :foo_bar_web, FooBarWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/foo_bar_web/{live,views}/.*(ex)$",
+      ~r"lib/foo_bar_web/(live|views)/.*(ex)$",
       ~r"lib/foo_bar_web/templates/.*(eex)$"
     ]
   ]

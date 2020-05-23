@@ -6,12 +6,13 @@ defmodule FooBarWeb.Application do
   use Application
 
   def start(_type, _args) do
-    # List all child processes to be supervised
     children = [
-      # Start the endpoint when the application starts
+      # Start the Telemetry supervisor
+      FooBarWeb.Telemetry,
+      # Start the Endpoint (http/https)
       FooBarWeb.Endpoint
-      # Starts a worker by calling: FooBarWeb.Worker.start_link(arg)
-      # {FooBarWeb.Worker, arg},
+      # Start a worker by calling: FooBarWeb.Worker.start_link(arg)
+      # {FooBarWeb.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -13,9 +13,10 @@ config :foo_bar,
 # Configures the endpoint
 config :foo_bar, FooBarWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "IU+jOzbaIyyWI3x+881ItrNUaXFD6FLM5DYg1sWr8qEwnsf1HpCobBKBNjz9zv6r",
-  render_errors: [view: FooBarWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: FooBar.PubSub, adapter: Phoenix.PubSub.PG2]
+  secret_key_base: "66towUUOuWjbNhW2zooz1wsPZRhKUuLRg5sM1Zlg3nS3uCRRUeTk7A0NAZSm4UP+",
+  render_errors: [view: FooBarWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: FooBar.PubSub,
+  live_view: [signing_salt: "UoZZCZlv"]
 
 # Configures Elixir's Logger
 config :logger, :console,
