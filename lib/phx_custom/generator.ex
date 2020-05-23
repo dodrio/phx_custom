@@ -1,5 +1,5 @@
 defmodule PhxCustom.Generator do
-  alias PhxCustom.File, as: MyFile
+  alias PhxCustom.Helper.File, as: MyFile
 
   def copy_file(src, dest) do
     copy({:regular, src, dest})

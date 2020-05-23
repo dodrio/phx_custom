@@ -1,5 +1,5 @@
 defmodule PhxCustom.Reporter do
-  alias PhxCustom.File, as: MyFile
+  alias PhxCustom.Helper.File, as: MyFile
 
   def report(file_path, bindings) do
     IO.puts("")

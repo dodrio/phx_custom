@@ -1,4 +1,4 @@
-defmodule PhxCustom.File do
+defmodule PhxCustom.Helper.File do
   def detect_type(path) do
     stat = File.lstat(path)
 

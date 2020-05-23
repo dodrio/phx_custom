@@ -1,5 +1,5 @@
 defmodule PhxCustom.CLI do
-  alias PhxCustom.File, as: MyFile
+  alias PhxCustom.Helper.File, as: MyFile
 
   def parse(args) do
     args

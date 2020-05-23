@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Phx.Custom.Release do
   use Mix.Task
 
   alias PhxCustom.CLI
-  alias PhxCustom.Release
+  alias PhxCustom.HandleRelease
 
   @impl Mix.Task
   def run(args) do
@@ -21,6 +21,6 @@ defmodule Mix.Tasks.Phx.Custom.Release do
 
   def process({project_root, _}) do
     root = Path.expand(project_root, File.cwd!())
-    Release.patch(root)
+    HandleRelease.patch(root)
   end
 end

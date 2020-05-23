@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Phx.Custom.Docker do
-  @shortdoc "Patch project with Dockerfile"
+  @shortdoc "Patch project with a Dockerfile"
 
   @moduledoc """
   #{@shortdoc}.
@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Phx.Custom.Docker do
   use Mix.Task
 
   alias PhxCustom.CLI
-  alias PhxCustom.Docker
+  alias PhxCustom.HandleDocker
 
   @impl Mix.Task
   def run(args) do
@@ -21,6 +21,6 @@ defmodule Mix.Tasks.Phx.Custom.Docker do
 
   def process({project_root, _}) do
     root = Path.expand(project_root, File.cwd!())
-    Docker.patch(root)
+    HandleDocker.patch(root)
   end
 end

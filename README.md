@@ -31,6 +31,10 @@ This Mix task provides:
 > What is the meaning of app or admin?
 > Generally, a web application consists of two sub applications, one for users, one for administrators. In the context of **phx_custom**, the code for users is called **app**, the code for administrators is called **admin**.
 
+### `mix phx.custom.release`
+
+### `mix phx.custom.docker`
+
 ## Installation
 
 Install latest version:

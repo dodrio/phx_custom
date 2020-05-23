@@ -1,4 +1,4 @@
-Last step, modify <%= router_path %> with following codes:
+Last step, modify <%= path.web_router %> with following codes:
 
   pipeline :layout_app do
     plug :put_layout, {<%= module_web %>.LayoutView, :app}

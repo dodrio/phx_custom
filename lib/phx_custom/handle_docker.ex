@@ -1,4 +1,4 @@
-defmodule PhxCustom.Docker do
+defmodule PhxCustom.HandleDocker do
   alias PhxCustom.Project
   alias PhxCustom.Generator
   alias PhxCustom.Reporter

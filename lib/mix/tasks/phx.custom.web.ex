@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Phx.Custom.Web do
-  @shortdoc "Patch project with custom Web template"
+  @shortdoc "Patch project with custom Web templates"
 
   @moduledoc """
   #{@shortdoc}.
@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Phx.Custom.Web do
   use Mix.Task
 
   alias PhxCustom.CLI
-  alias PhxCustom.Web
+  alias PhxCustom.HandleWeb
 
   @impl Mix.Task
   def run(args) do
@@ -21,6 +21,6 @@ defmodule Mix.Tasks.Phx.Custom.Web do
 
   def process({project_root, _}) do
     root = Path.expand(project_root, File.cwd!())
-    Web.patch(root)
+    HandleWeb.patch(root)
   end
 end
