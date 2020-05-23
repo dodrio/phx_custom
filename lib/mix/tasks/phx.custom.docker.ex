@@ -20,7 +20,6 @@ defmodule Mix.Tasks.Phx.Custom.Docker do
   end
 
   def process({project_root, _}) do
-    root = Path.expand(project_root, File.cwd!())
-    HandleDocker.patch(root)
+    HandleDocker.patch(project_root)
   end
 end

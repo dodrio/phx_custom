@@ -10,7 +10,7 @@ database_url =
 
 database_pool_size = System.get_env("POOL_SIZE") || "10"
 
-config :<%= @project_name %>, <%= @camelcase_project_name %>.Repo,
+config :<%= @app_ctx %>, <%= @module_ctx %>.Repo,
   # ssl: true,
   url: database_url,
   pool_size: String.to_integer(database_pool_size)
@@ -25,14 +25,7 @@ secret_key_base =
 
 port = System.get_env("PORT") || "4000"
 
-<%
-project_name = if @type == :umbrella do
-  "#{@project_name}_web"
-else
-  @project_name
-end
-%>
-config :<%= project_name %>, <%= @camelcase_project_name %>Web.Endpoint,
+config :<%= @app_web %>, <%= @module_web %>.Endpoint,
   http: [:inet6, port: String.to_integer(port)],
   secret_key_base: secret_key_base,
   # required by mix release

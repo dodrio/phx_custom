@@ -13,6 +13,8 @@ defmodule PhxCustom.Project do
     path_ctx_app = get_path_ctx_app({type, project_name})
     module_web = "#{project_name_camelcase}Web"
     module_ctx = project_name_camelcase
+    app_web = get_app_web({type, project_name})
+    app_ctx = get_app_ctx({type, project_name})
 
     paths = %{
       root: root,
@@ -30,7 +32,9 @@ defmodule PhxCustom.Project do
       project_name_camelcase: project_name_camelcase,
       path: paths,
       module_web: module_web,
-      module_ctx: module_ctx
+      module_ctx: module_ctx,
+      app_web: app_web,
+      app_ctx: app_ctx
     ]
   end
 
@@ -116,5 +120,17 @@ defmodule PhxCustom.Project do
   def get_path_web_statics({type, project_name}) do
     path_web_app = get_path_web_app({type, project_name})
     Path.join(path_web_app, "priv/static")
+  end
+
+  def get_app_web({:general, project_name}) do
+    project_name
+  end
+
+  def get_app_web({:umbrella, project_name}) do
+    "#{project_name}_web"
+  end
+
+  def get_app_ctx({_, project_name}) do
+    project_name
   end
 end

@@ -9,12 +9,11 @@ defmodule PhxCustom.HandleRelease do
     assigns = Project.inspect(root)
     template_base = Path.expand("templates/release", :code.priv_dir(@app))
 
-    Generator.delete(
-      [
-        "config/prod.secret.exs"
-      ]
-      |> Enum.map(&Path.expand(&1, root))
-    )
+    [
+      "config/prod.secret.exs"
+    ]
+    |> Enum.map(&Path.expand(&1, root))
+    |> Generator.delete()
 
     Generator.copy_file(
       Path.join(template_base, "config/releases.exs"),

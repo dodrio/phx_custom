@@ -20,7 +20,6 @@ defmodule Mix.Tasks.Phx.Custom.Web do
   end
 
   def process({project_root, _}) do
-    root = Path.expand(project_root, File.cwd!())
-    HandleWeb.patch(root)
+    HandleWeb.patch(project_root)
   end
 end

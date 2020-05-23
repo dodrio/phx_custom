@@ -8,7 +8,6 @@ defmodule PhxCustom.HandleDocker do
   def patch(root) do
     assigns = Project.inspect(root)
     template_base = Path.expand("templates/docker", :code.priv_dir(@app))
-
     type = Keyword.get(assigns, :type)
 
     Generator.copy_file(

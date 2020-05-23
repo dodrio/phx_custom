@@ -20,7 +20,6 @@ defmodule Mix.Tasks.Phx.Custom.Release do
   end
 
   def process({project_root, _}) do
-    root = Path.expand(project_root, File.cwd!())
-    HandleRelease.patch(root)
+    HandleRelease.patch(project_root)
   end
 end

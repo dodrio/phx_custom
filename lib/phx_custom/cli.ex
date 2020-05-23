@@ -8,6 +8,7 @@ defmodule PhxCustom.CLI do
   end
 
   defp args_to_internal_representation([project_root | rest_args]) do
+    project_root = Path.expand(project_root, File.cwd!())
     {project_root, rest_args}
   end
 
