@@ -6,6 +6,20 @@ defmodule Mix.Tasks.Phx.Custom.Web do
 
       mix phx.custom.web <project> [options]
 
+  This task provides following features:
+
+  - enhanced assets pipeline:
+    - built-in [tailwindcss](https://tailwindcss.com/) support
+    - source map support for JavaScript and CSS
+  - separation for app and admin:
+    - standalone frontend resources for app and admin
+    - standalone namespaces for app and admin views
+
+  > What is the meaning of app or admin?
+  > Generally, a web application consists of two sub applications, one for users
+  > , one for administrators. In the context of `phx_custom`, the code for
+  > users is called `app`, the code for administrators is called `admin`.
+
   ## options
 
   + `--update` - update webpack config for patched projects.
