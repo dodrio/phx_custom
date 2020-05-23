@@ -22,7 +22,7 @@ defmodule PhxCustom.HandleDocker do
       assigns
     )
 
-    post_file = Path.join(template_base, "post-info.txt.eex")
+    post_file = Path.join(template_base, "post-info.md.eex")
     Reporter.report(post_file, assigns)
   end
 end

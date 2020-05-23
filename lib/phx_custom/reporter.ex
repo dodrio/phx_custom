@@ -2,8 +2,6 @@ defmodule PhxCustom.Reporter do
   alias PhxCustom.Helper.File, as: MyFile
 
   def report(file_path, bindings) do
-    IO.puts("")
-
     content =
       case MyFile.detect_type(file_path) do
         :eex ->
@@ -13,6 +11,7 @@ defmodule PhxCustom.Reporter do
           File.read!(file_path)
       end
 
-    IO.puts(content)
+    IO.puts("")
+    IO.ANSI.Docs.print(content)
   end
 end

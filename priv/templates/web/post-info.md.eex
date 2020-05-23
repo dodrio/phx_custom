@@ -1,0 +1,23 @@
+Last step, modify `<%= path.web_router %>` with following codes:
+
+    pipeline :layout_app do
+      plug :put_layout, {<%= module_web %>.LayoutView, :app}
+    end
+
+    pipeline :layout_admin do
+      plug :put_layout, {<%= module_web %>.LayoutView, :admin}
+    end
+
+    scope "/", <%= module_web %>.App, as: :app do
+      pipe_through [:browser, :layout_app]
+
+      get "/", PageController, :index
+    end
+
+    scope "/admin", <%= module_web %>.Admin, as: :admin do
+      pipe_through [:browser, :layout_admin]
+
+      get "/", PageController, :index
+    end
+
+That's all.
