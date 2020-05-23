@@ -17,7 +17,6 @@ defmodule PhxCustom.Project do
     app_ctx = get_app_ctx({type, project_name})
 
     paths = %{
-      root: root,
       web_app: path_web_app,
       web_lib: path_web_lib,
       web_router: path_web_router,
