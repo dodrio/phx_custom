@@ -31,7 +31,9 @@ mix archive.install hex phx_custom
 
 ## Usage
 
-A general process for initializing a new project:
+Visit [HexDocs](https://hexdocs.pm/phx_custom) for more details.
+
+For now, have a look at the following quickstart:
 
 ```sh
 # create an project
