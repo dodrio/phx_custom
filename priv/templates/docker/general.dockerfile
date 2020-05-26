@@ -103,11 +103,12 @@ RUN mkdir -p $WORK_DIR
 WORKDIR $WORK_DIR
 
 # copy release
-COPY --from=release-assembler $WORK_DIR/_build/$MIX_ENV ./
+COPY --from=release-assembler \
+  --chown=nobody:nobody \
+  $WORK_DIR/_build/$MIX_ENV ./
 
 # limit permissions
-RUN chown -R nobody:nobody $WORK_DIR
-USER nobody
+USER nobody:nobody
 
 # health check
 HEALTHCHECK --start-period=30s --interval=30s --timeout=3s \
