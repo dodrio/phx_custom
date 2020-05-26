@@ -14,6 +14,7 @@ defmodule PhxCustomTest.Project do
                project_name_camelcase: "FooBar",
                path: %{
                  ctx_app: "",
+                 ctx_lib: "lib/foo_bar",
                  web_app: "",
                  web_assets: "assets",
                  web_lib: "lib/foo_bar_web",
@@ -36,6 +37,7 @@ defmodule PhxCustomTest.Project do
                project_name_camelcase: "FooBar",
                path: %{
                  ctx_app: "apps/foo_bar",
+                 ctx_lib: "apps/foo_bar/lib/foo_bar",
                  web_app: "apps/foo_bar_web",
                  web_assets: "apps/foo_bar_web/assets",
                  web_lib: "apps/foo_bar_web/lib/foo_bar_web",

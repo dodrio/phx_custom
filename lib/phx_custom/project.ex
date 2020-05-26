@@ -11,6 +11,7 @@ defmodule PhxCustom.Project do
     path_web_assets = get_path_web_assets({type, project_name})
     path_web_statics = get_path_web_statics({type, project_name})
     path_ctx_app = get_path_ctx_app({type, project_name})
+    path_ctx_lib = get_path_ctx_lib({type, project_name})
     module_web = "#{project_name_camelcase}Web"
     module_ctx = project_name_camelcase
     app_web = get_app_web({type, project_name})
@@ -22,7 +23,8 @@ defmodule PhxCustom.Project do
       web_router: path_web_router,
       web_assets: path_web_assets,
       web_statics: path_web_statics,
-      ctx_app: path_ctx_app
+      ctx_app: path_ctx_app,
+      ctx_lib: path_ctx_lib
     }
 
     [
@@ -85,20 +87,25 @@ defmodule PhxCustom.Project do
     end
   end
 
-  def get_path_web_app({:general, _project_name}) do
-    ""
-  end
-
-  def get_path_web_app({:umbrella, project_name}) do
-    "apps/#{project_name}_web"
-  end
-
   def get_path_ctx_app({:general, _project_name}) do
     ""
   end
 
   def get_path_ctx_app({:umbrella, project_name}) do
     "apps/#{project_name}"
+  end
+
+  def get_path_ctx_lib({type, project_name}) do
+    path_ctx_app = get_path_ctx_app({type, project_name})
+    Path.join(path_ctx_app, "lib/#{project_name}")
+  end
+
+  def get_path_web_app({:general, _project_name}) do
+    ""
+  end
+
+  def get_path_web_app({:umbrella, project_name}) do
+    "apps/#{project_name}_web"
   end
 
   def get_path_web_lib({type, project_name}) do

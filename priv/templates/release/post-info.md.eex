@@ -7,7 +7,7 @@ import_config "prod.secret.exs"
 2. replace all `use Mix.Config` with `import Config` in config files.
 
 3. modify mix.exs according following links:
-  + https://hexdocs.pm/mix/Mix.Tasks.Release.html#module-umbrellas
-  + https://hexdocs.pm/mix/Mix.Tasks.Release.html#module-customization
+  + https://hexdocs.pm/phoenix/releases.html
+  + https://hexdocs.pm/mix/Mix.Tasks.Release.html
 
 That's all.

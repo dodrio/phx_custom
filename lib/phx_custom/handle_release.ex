@@ -7,6 +7,7 @@ defmodule PhxCustom.HandleRelease do
 
   def patch(root) do
     assigns = Project.inspect(root)
+    path = Keyword.get(assigns, :path)
     template_base = Path.expand("templates/release", :code.priv_dir(@app))
 
     [
@@ -14,6 +15,12 @@ defmodule PhxCustom.HandleRelease do
     ]
     |> Enum.map(&Path.expand(&1, root))
     |> Generator.delete()
+
+    Generator.copy_file(
+      Path.join(template_base, "release.ex"),
+      Path.join([root, path.ctx_lib, "release.ex"]),
+      assigns
+    )
 
     Generator.copy_file(
       Path.join(template_base, "config/releases.exs"),
