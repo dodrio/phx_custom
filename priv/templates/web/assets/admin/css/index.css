@@ -1,5 +1,11 @@
 /* purgecss start ignore */
 @import 'tailwindcss/base';
+
+/**
+ * add base styles here
+ * https://tailwindcss.com/docs/adding-base-styles
+ */
+
 @import 'tailwindcss/components';
 /* purgecss end ignore */
 
