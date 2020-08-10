@@ -8,9 +8,11 @@ defmodule Mix.Tasks.Phx.Custom.Web do
 
   This task provides following features:
 
-  - enhanced assets pipeline:
-    - built-in [tailwindcss](https://tailwindcss.com/) support
-    - source map support for JavaScript and CSS
+  + [Tailwind CSS](https://tailwindcss.com/) with following plugins:
+    - @tailwindcss/ui
+    - @tailwindcss/typography
+  + [Inter font family](https://rsms.me/inter/) support
+  + source map support for JavaScript and CSS
 
   ## options
 
