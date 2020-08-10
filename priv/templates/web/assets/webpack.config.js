@@ -1,5 +1,4 @@
 /* eslint-env node */
-
 const path = require('path')
 const glob = require('glob')
 
@@ -61,13 +60,7 @@ function loadJS(isProd) {
     },
     entry: {
       app: [].concat(
-        resolveSrc('app/index.js'),
-        glob.sync(resolveSrc('app/vendor/**/*.js')),
-        glob.sync(resolveSrc('vendor/**/*.js'))
-      ),
-      admin: [].concat(
-        resolveSrc('admin/index.js'),
-        glob.sync(resolveSrc('admin/vendor/**/*.js')),
+        resolveSrc('index.js'),
         glob.sync(resolveSrc('vendor/**/*.js'))
       ),
     },
@@ -107,11 +100,10 @@ function loadCSS(isProd) {
       pcPurgecss({
         content: [
           '../**/*.html.eex',
-          '../**/views/**/*.ex',
           '../**/*.html.leex',
+          '../**/views/**/*.ex',
           '../**/live/**/*.ex',
-          './app/**/*.js',
-          './admin/**/*.js',
+          './**/*.js',
         ],
         defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
       })

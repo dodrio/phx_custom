@@ -7,6 +7,12 @@
  */
 
 @import 'tailwindcss/components';
+
+/**
+ * add custom components here
+ * https://tailwindcss.com/docs/extracting-components
+ */
+
 /* purgecss end ignore */
 
 @import 'tailwindcss/utilities';

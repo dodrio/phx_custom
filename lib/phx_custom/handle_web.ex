@@ -16,10 +16,7 @@ defmodule PhxCustom.HandleWeb do
 
     [
       path.web_assets,
-      path.web_statics,
-      "#{path.web_lib}/controllers/*",
-      "#{path.web_lib}/templates/*",
-      "#{path.web_lib}/page_view.ex"
+      path.web_statics
     ]
     |> Enum.map(&Path.join(root, &1))
     |> Generator.delete()
@@ -27,12 +24,6 @@ defmodule PhxCustom.HandleWeb do
     Generator.copy_dir(
       Path.join(template_base, "assets"),
       Path.join(root, path.web_assets),
-      assigns
-    )
-
-    Generator.copy_dir(
-      Path.join(template_base, "lib/_web"),
-      Path.join(root, path.web_lib),
       assigns
     )
 
