@@ -4,10 +4,7 @@
 
 ## Dependencies
 
-- Node.js >= 9.11.2
-- Phoenix >= 1.5.0
-
-> Extractor of PurgeCSS is using a regular expression which is only compatible with Node.js >= 9.11.2.
+- Phoenix >= 1.5.7
 
 ## Installation
 

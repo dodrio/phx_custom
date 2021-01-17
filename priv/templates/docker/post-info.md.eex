@@ -1,3 +1,2 @@
-Generally speaking, editing customizable **ARG** in Dockerfile is enough.
-
-But, if you need more customizations, feel free to edit it.
+> Generally speaking, editing customizable **ARG** in Dockerfile is enough.
+> But, if you need more customizations, feel free to edit it.
