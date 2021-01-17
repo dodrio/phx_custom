@@ -6,7 +6,7 @@ defmodule <%= @module_ctx %>.ReleaseTasks do
   Run the functions in this module by calling `eval` command provided by
   release.
 
-  Run functions manually:
+  Run a function manually:
 
        _build/prod/rel/$RELEASE_NAME/bin/$RELEASE_NAME eval "<%= @module_ctx %>.ReleaseTasks.migrate()"
 

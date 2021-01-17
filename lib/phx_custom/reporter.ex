@@ -12,6 +12,6 @@ defmodule PhxCustom.Reporter do
       end
 
     IO.puts("")
-    IO.ANSI.Docs.print(content)
+    IO.ANSI.Docs.print(content, "text/markdown")
   end
 end

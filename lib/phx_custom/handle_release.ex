@@ -17,14 +17,14 @@ defmodule PhxCustom.HandleRelease do
     |> Generator.delete()
 
     Generator.copy_file(
-      Path.join(template_base, "release.ex"),
-      Path.join([root, path.ctx_lib, "release.ex"]),
+      Path.join(template_base, "release_tasks.ex"),
+      Path.join([root, path.ctx_lib, "release_tasks.ex"]),
       assigns
     )
 
     Generator.copy_file(
-      Path.join(template_base, "config/releases.exs"),
-      Path.join(root, "config/releases.exs"),
+      Path.join(template_base, "config/runtime.exs"),
+      Path.join(root, "config/runtime.exs"),
       assigns
     )
 
