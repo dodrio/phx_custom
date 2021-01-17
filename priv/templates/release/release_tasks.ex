@@ -1,4 +1,4 @@
-defmodule <%= @module_ctx %>.Release do
+defmodule <%= @module_ctx %>.ReleaseTasks do
   @app :<%= @app_ctx %>
   @extra_apps []
 
@@ -6,9 +6,13 @@ defmodule <%= @module_ctx %>.Release do
   Run the functions in this module by calling `eval` command provided by
   release.
 
-  Run a function manually:
+  Run functions manually:
 
-       _build/prod/rel/<%= @app_ctx %>/bin/<%= @app_ctx %> eval "<%= @module_ctx %>.Release.migrate()"
+       _build/prod/rel/$RELEASE_NAME/bin/$RELEASE_NAME eval "<%= @module_ctx %>.ReleaseTasks.migrate()"
+
+       _build/prod/rel/$RELEASE_NAME/bin/$RELEASE_NAME eval "<%= @module_ctx %>.ReleaseTasks.rollback()"
+
+       _build/prod/rel/$RELEASE_NAME/bin/$RELEASE_NAME eval "<%= @module_ctx %>.ReleaseTasks.seed()"
 
 
   Run a function automatically when starting a release:
@@ -17,7 +21,7 @@ defmodule <%= @module_ctx %>.Release do
   # mix release.init && $EDITOR rel/env.sh.eex
   case $RELEASE_COMMAND in
       start*)
-          "$RELEASE_ROOT/bin/$RELEASE_NAME" eval "<%= @module_ctx %>.Release.migrate()"
+          "$RELEASE_ROOT/bin/$RELEASE_NAME" eval "<%= @module_ctx %>.ReleaseTasks.migrate()"
           ;;
       *)
           ;;
