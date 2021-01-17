@@ -38,3 +38,6 @@ npm-debug.log
 # Git related files
 .git
 .gitignore
+
+# Development environment related files
+.envrc
