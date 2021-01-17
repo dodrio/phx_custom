@@ -4,6 +4,7 @@
 
 ## Dependencies
 
+- Elixir >= 1.11
 - Phoenix >= 1.5.7
 
 ## Installation
