@@ -22,9 +22,13 @@ mix archive.install hex phx_custom
 
 ## Available Tasks
 
-- `mix phx.custom.web`
 - `mix phx.custom.release`
 - `mix phx.custom.docker`
+
+## Docs
+
+- `mix help phx.custom.release`
+- `mix help phx.custom.docker`
 
 ## Usage
 
@@ -36,9 +40,6 @@ For now, have a look at the following quickstart:
 # create an project
 $ mix phx.new project
 $ cd project
-
-# patch web related code
-$ mix phx.custom.web .
 
 # install dependencies
 $ mix deps.get
