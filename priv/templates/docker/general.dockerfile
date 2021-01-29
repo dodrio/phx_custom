@@ -55,8 +55,8 @@ WORKDIR $WORK_DIR
 # install npm dependencies
 COPY --from=base $WORK_DIR/deps deps/
 COPY $ASSETS_DIR/package.json $ASSETS_DIR/
-COPY $ASSETS_DIR/yarn.lock $ASSETS_DIR/
-RUN yarn --cwd $ASSETS_DIR install
+COPY $ASSETS_DIR/package-lock.json $ASSETS_DIR/
+RUN npm install --prefix $ASSETS_DIR
 
 # copy source code
 # when buliding assets, analyzing eex files would be required.
@@ -65,7 +65,7 @@ COPY . ./
 
 # build
 COPY $ASSETS_DIR $ASSETS_DIR/
-RUN yarn --cwd $ASSETS_DIR deploy
+RUN npm run deploy --prefix $ASSETS_DIR
 
 
 # > Assemble release
