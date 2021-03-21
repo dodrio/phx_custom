@@ -33,7 +33,7 @@ ENV MIX_ENV $MIX_ENV
 RUN mkdir -p $WORK_DIR
 WORKDIR $WORK_DIR
 
-RUN apk add --no-cache git
+RUN apk add --no-cache build-base git
 
 # install hex + rebar
 RUN mix local.hex --force
