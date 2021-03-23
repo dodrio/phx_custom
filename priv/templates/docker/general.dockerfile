@@ -20,6 +20,7 @@ FROM elixir:1.11-alpine AS base
 # args
 ARG MIX_ENV
 ARG WORK_DIR
+ARG ASSETS_DIR
 
 # envs
 ENV MIX_ENV $MIX_ENV
@@ -28,62 +29,38 @@ ENV MIX_ENV $MIX_ENV
 RUN mkdir -p $WORK_DIR
 WORKDIR $WORK_DIR
 
-RUN apk add --no-cache build-base git
-
-# install hex + rebar
-RUN mix local.hex --force
-RUN mix local.rebar --force
+RUN apk add --no-cache \
+  build-base \
+  git \
+  nodejs \
+  nodejs-npm
 
 # install mix dependencies
+RUN mix local.hex --force
+RUN mix local.rebar --force
 COPY mix.exs mix.lock ./
 COPY config config/
 RUN mix deps.get --only $MIX_ENV
-RUN mix deps.compile
-
-
-# > Build assets
-FROM node:14-alpine AS assets-builder
-
-# args
-ARG WORK_DIR
-ARG ASSETS_DIR
-
-# preparation
-RUN mkdir -p $WORK_DIR
-WORKDIR $WORK_DIR
 
 # install npm dependencies
-COPY --from=base $WORK_DIR/deps deps/
 COPY $ASSETS_DIR/package.json $ASSETS_DIR/
 COPY $ASSETS_DIR/package-lock.json $ASSETS_DIR/
 RUN npm install --prefix $ASSETS_DIR
 
+# compile deps (cache as much as possible)
+RUN mix deps.compile
+
 # copy source code
-# when buliding assets, analyzing eex files would be required.
-# in case of omitting files, we copy them all.
 COPY . ./
-
-# build
-COPY $ASSETS_DIR $ASSETS_DIR/
-RUN npm run deploy --prefix $ASSETS_DIR
-
-
-# > Assemble release
-FROM base AS release-assembler
-
-# args
-ARG WORK_DIR
 
 # compile
-COPY . ./
 RUN mix compile
 
 # digest and compress assets
-ARG STATIC_DIR=priv/static
-COPY --from=assets-builder $WORK_DIR/$STATIC_DIR $STATIC_DIR/
+RUN npm run deploy --prefix $ASSETS_DIR
 RUN mix phx.digest
 
-# release
+# assemble release
 RUN mix release
 
 
