@@ -84,7 +84,9 @@ ENV HEALTHCHECK_PATH $HEALTHCHECK_PATH
 RUN mkdir -p $WORK_DIR
 WORKDIR $WORK_DIR
 
-RUN apk add --no-cache curl
+RUN apk add --no-cache \
+  curl \
+  inotify-tools
 
 # copy release
 COPY --from=release-assembler \
