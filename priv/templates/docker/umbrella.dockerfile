@@ -72,7 +72,7 @@ RUN mix release
 
 
 # > Final
-FROM elixir:1.11-alpine
+FROM alpine:3.13
 
 # args
 ARG MIX_ENV
@@ -93,7 +93,8 @@ WORKDIR $WORK_DIR
 
 RUN apk add --no-cache \
   curl \
-  inotify-tools
+  inotify-tools && \
+  update-ca-certificates --fresh
 
 # copy release
 COPY --from=release-assembler \
