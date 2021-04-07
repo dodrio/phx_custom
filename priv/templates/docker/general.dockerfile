@@ -14,8 +14,8 @@ ARG WORK_DIR=/app
 ARG ASSETS_DIR=assets
 
 
-# > Base image with compiling deps
-FROM elixir:1.11-alpine AS base
+# > Prepare
+FROM elixir:1.11-alpine AS release-assembler
 
 # args
 ARG MIX_ENV
