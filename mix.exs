@@ -1,7 +1,7 @@
 defmodule PhxCustom.MixProject do
   use Mix.Project
 
-  @version "3.0.1"
+  @version "3.0.2"
   @source_url "https://github.com/c4710n/phx_custom"
 
   def project do
