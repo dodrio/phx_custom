@@ -72,7 +72,7 @@ RUN mix release
 
 
 # > Final
-FROM alpine:3.13
+FROM elixir:1.11-alpine
 
 # args
 ARG MIX_ENV
