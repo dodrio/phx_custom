@@ -104,7 +104,9 @@ RUN \
      "$USER"
 
 RUN apk add --no-cache \
-  openssl ncurses-libs inotify-tools \
+  ncurses-libs \
+  libgcc libstdc++ \ # required by JIT from OTP 24
+  openssl \
   curl && \
   update-ca-certificates --fresh
 
