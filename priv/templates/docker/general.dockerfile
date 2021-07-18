@@ -37,7 +37,7 @@ RUN apk add --no-cache \
   build-base \
   git \
   nodejs \
-  nodejs-npm
+  npm
 
 # install mix dependencies
 RUN mix local.hex --force
