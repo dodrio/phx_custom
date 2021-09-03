@@ -8,9 +8,9 @@ ARG RELEASE_NAME=<%= @project_name %>
 ARG PORT=4000
 ARG HEALTHCHECK_PATH=/health-check
 ARG USER=elixir
-ARG VERSION_ELIXIR=1.11.3
-ARG VERSION_ERLANG=23.2.6
-ARG VERSION_ALPINE=3.13.2
+ARG VERSION_ELIXIR=1.12.2
+ARG VERSION_ERLANG=24.0.6
+ARG VERSION_ALPINE=3.14.0
 
 # internal args
 ARG MIX_ENV=prod
@@ -98,7 +98,7 @@ RUN \
   && adduser \
      -u 1000 \
      -G "$USER" \
-     -h "$HOME" \
+     -h "/home/$USER" \
      -s /bin/sh \
      -D \
      "$USER"
