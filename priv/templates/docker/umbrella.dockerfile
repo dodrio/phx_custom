@@ -19,6 +19,7 @@ ARG WORK_DIR=/umbrella
 ARG APP_WEB_DIR=apps/${PROJECT_NAME}_web
 ARG APP_CTX_DIR=apps/${PROJECT_NAME}
 ARG WEB_ASSETS_DIR=${APP_WEB_DIR}/assets
+ARG CONFIG_DIR=config
 
 
 # > Prepare
@@ -30,6 +31,7 @@ ARG WORK_DIR
 ARG APP_WEB_DIR
 ARG APP_CTX_DIR
 ARG WEB_ASSETS_DIR
+ARG CONFIG_DIR
 
 # envs
 ENV MIX_ENV $MIX_ENV
@@ -57,20 +59,28 @@ COPY $WEB_ASSETS_DIR/package.json $WEB_ASSETS_DIR/
 COPY $WEB_ASSETS_DIR/package-lock.json $WEB_ASSETS_DIR/
 RUN npm install --prefix $WEB_ASSETS_DIR
 
-# compile deps (cache as much as possible)
+# compile mix deps
+RUN mkdir -p $CONFIG_DIR
+# copy compile-time config files before we compile dependencies to ensure any
+# relevant config change will trigger the dependencies to be re-compiled.
+COPY $CONFIG_DIR/config.exs $CONFIG_DIR/$MIX_ENV.exs $CONFIG_DIR/
 RUN mix deps.compile
 
 # copy source code
-COPY . ./
+COPY apps apps
 
-# compile
+# compile applications
 RUN mix compile
 
-# digest and compress assets
+# compile assets
 RUN npm run deploy --prefix $WEB_ASSETS_DIR
 RUN cd $APP_WEB_DIR && mix phx.digest && cd -
 
 # assemble release
+# changes to config/runtime.exs don't require recompiling the code
+COPY $CONFIG_DIR/runtime.exs $CONFIG_DIR/
+# uncomment COPY if rel/ exists
+# COPY rel rel
 RUN mix release
 
 
@@ -110,20 +120,25 @@ RUN \
      -D \
      "$USER"
 
+# libgcc and libstdc++ are required by JIT from OTP 24
 RUN apk add --no-cache \
   ncurses-libs \
-  libgcc libstdc++ \ # required by JIT from OTP 24
+  libgcc libstdc++ \
   openssl \
   curl && \
   update-ca-certificates --fresh
+
+# limit permissions
+USER "$USER":"$USER"
 
 # copy release
 COPY --from=release-assembler \
   --chown="$USER":"$USER" \
   $WORK_DIR/_build/$MIX_ENV/rel/$RELEASE_NAME ./
 
-# limit permissions
-USER "$USER":"$USER"
+# the exec form of ENTRYPOINT doesn't support shell var interpretation.
+# I have to copy it to a file with fixed name.
+RUN cp bin/$RELEASE_NAME bin/app
 
 # health check
 HEALTHCHECK --start-period=30s --interval=5s --timeout=3s --retries=3 \
@@ -131,5 +146,6 @@ HEALTHCHECK --start-period=30s --interval=5s --timeout=3s --retries=3 \
 
 EXPOSE $PORT
 
-# use shell form of ENTRYPOINT in order to use shell var interpretation
-ENTRYPOINT bin/$RELEASE_NAME start
+ENTRYPOINT ["bin/app"]
+
+CMD ["start"]

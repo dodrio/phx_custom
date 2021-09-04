@@ -16,6 +16,7 @@ ARG VERSION_ALPINE=3.14.0
 ARG MIX_ENV=prod
 ARG WORK_DIR=/app
 ARG ASSETS_DIR=assets
+ARG CONFIG_DIR=config
 
 
 # > Prepare
@@ -25,6 +26,7 @@ FROM hexpm/elixir:$VERSION_ELIXIR-erlang-$VERSION_ERLANG-alpine-$VERSION_ALPINE 
 ARG MIX_ENV
 ARG WORK_DIR
 ARG ASSETS_DIR
+ARG CONFIG_DIR
 
 # envs
 ENV MIX_ENV $MIX_ENV
@@ -50,20 +52,30 @@ COPY $ASSETS_DIR/package.json $ASSETS_DIR/
 COPY $ASSETS_DIR/package-lock.json $ASSETS_DIR/
 RUN npm install --prefix $ASSETS_DIR
 
-# compile deps (cache as much as possible)
+# compile mix deps
+RUN mkdir -p $CONFIG_DIR
+# copy compile-time config files before we compile dependencies to ensure any
+# relevant config change will trigger the dependencies to be re-compiled.
+COPY $CONFIG_DIR/config.exs $CONFIG_DIR/$MIX_ENV.exs $CONFIG_DIR/
 RUN mix deps.compile
 
 # copy source code
-COPY . ./
+COPY assets assets
+COPY lib lib
+COPY priv priv
 
-# compile
+# compile application
 RUN mix compile
 
-# digest and compress assets
+# compile assets
 RUN npm run deploy --prefix $ASSETS_DIR
 RUN mix phx.digest
 
 # assemble release
+# changes to config/runtime.exs don't require recompiling the code
+COPY $CONFIG_DIR/runtime.exs $CONFIG_DIR/
+# uncomment COPY if rel/ exists
+# COPY rel rel
 RUN mix release
 
 
@@ -103,20 +115,25 @@ RUN \
      -D \
      "$USER"
 
+# required by JIT from OTP 24
 RUN apk add --no-cache \
   ncurses-libs \
-  libgcc libstdc++ \ # required by JIT from OTP 24
+  libgcc libstdc++ \
   openssl \
   curl && \
   update-ca-certificates --fresh
+
+# limit permissions
+USER "$USER":"$USER"
 
 # copy release
 COPY --from=release-assembler \
   --chown="$USER":"$USER" \
   $WORK_DIR/_build/$MIX_ENV/rel/$RELEASE_NAME ./
 
-# limit permissions
-USER "$USER":"$USER"
+# the exec form of ENTRYPOINT doesn't support shell var interpretation.
+# I have to copy it to a file with fixed name.
+RUN cp bin/$RELEASE_NAME bin/app
 
 # health check
 HEALTHCHECK --start-period=30s --interval=5s --timeout=3s --retries=3 \
@@ -124,5 +141,6 @@ HEALTHCHECK --start-period=30s --interval=5s --timeout=3s --retries=3 \
 
 EXPOSE $PORT
 
-# use shell form of ENTRYPOINT in order to use shell var interpretation
-ENTRYPOINT bin/$RELEASE_NAME start
+ENTRYPOINT ["bin/app"]
+
+CMD ["start"]
