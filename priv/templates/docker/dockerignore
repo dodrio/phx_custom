@@ -1,11 +1,50 @@
+.dockerignore
+
+## Git related files
+
+# there are valid reasons to keep the .git, namely so that you can get the
+# current commit hash
+#.git
+.gitignore
+
+
+## Mix artifacts
+
 # The directory Mix will write compiled artifacts to.
 /_build/
 
-# If you run "mix test --cover", coverage assets end up here.
-/cover/
-
 # The directory Mix downloads your dependencies sources to.
 /deps/
+
+# Ignore package tarball (built via "mix hex.build").
+*.tar
+
+# Also ignore archive artifacts (built via "mix archive.build").
+*.ez
+
+# Also ignore local releases (built via "mix release").
+releases
+
+
+## NPM related files
+
+# The directory NPM downloads your dependencies sources to.
+node_modules
+
+# If NPM crashes, it generates a log, let's ignore it too.
+npm-debug.log
+
+
+## Development environment related files
+
+.envrc
+.env
+
+
+## Misc
+
+# If you run "mix test --cover", coverage assets end up here.
+/cover/
 
 # Where 3rd-party dependencies like ExDoc output generated docs.
 /doc/
@@ -16,29 +55,8 @@
 # If the VM crashes, it generates a dump, let's ignore it too.
 erl_crash.dump
 
-# Also ignore archive artifacts (built via "mix archive.build").
-*.ez
-
-# Ignore package tarball (built via "mix hex.build").
-*.tar
-
-# If NPM crashes, it generates a log, let's ignore it too.
-npm-debug.log
-
-# The directory NPM downloads your dependencies sources to.
-/assets/node_modules/
-/apps/*_web/assets/node_modules/
-
 # Since we are building assets from assets/,
 # we ignore priv/static/assets. You may want to comment
 # this depending on your deployment strategy.
 /priv/static/assets
 /apps/*_web/priv/static/assets
-
-# Git related files
-.git
-.gitignore
-
-# Development environment related files
-.envrc
-.env
