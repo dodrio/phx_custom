@@ -11,8 +11,8 @@ defmodule PhxCustom.HandleRelease do
     template_base = Path.expand("templates/release", :code.priv_dir(@app))
 
     Generator.copy_file(
-      Path.join(template_base, "release_tasks.ex"),
-      Path.join([root, path.ctx_lib, "release_tasks.ex"]),
+      Path.join(template_base, "release.ex"),
+      Path.join([root, path.ctx_lib, "release.ex"]),
       assigns
     )
 
