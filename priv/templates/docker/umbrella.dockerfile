@@ -55,8 +55,9 @@ COPY $APP_CTX_DIR/mix.exs $APP_CTX_DIR/
 RUN mix deps.get --only $MIX_ENV
 
 # install npm dependencies
-COPY $WEB_ASSETS_DIR/package.json $WEB_ASSETS_DIR/
-COPY $WEB_ASSETS_DIR/package-lock.json $WEB_ASSETS_DIR/
+COPY $WEB_ASSETS_DIR/package.json \
+  $WEB_ASSETS_DIR/package-lock.json \
+  $WEB_ASSETS_DIR/
 RUN npm install --prefix $WEB_ASSETS_DIR
 
 # compile mix deps
@@ -73,8 +74,7 @@ COPY apps apps
 RUN mix compile
 
 # compile assets
-RUN npm run deploy --prefix $WEB_ASSETS_DIR
-RUN cd $APP_WEB_DIR && mix phx.digest && cd -
+RUN cd $APP_WEB_DIR && mix assets.deploy && cd -
 
 # assemble release
 # changes to config/runtime.exs don't require recompiling the code

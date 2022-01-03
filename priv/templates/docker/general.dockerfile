@@ -48,8 +48,9 @@ COPY mix.exs mix.lock ./
 RUN mix deps.get --only $MIX_ENV
 
 # install npm dependencies
-COPY $ASSETS_DIR/package.json $ASSETS_DIR/
-COPY $ASSETS_DIR/package-lock.json $ASSETS_DIR/
+COPY $ASSETS_DIR/package.json \
+  $ASSETS_DIR/package-lock.json \
+  $ASSETS_DIR/
 RUN npm install --prefix $ASSETS_DIR
 
 # compile mix deps
@@ -68,8 +69,7 @@ COPY priv priv
 RUN mix compile
 
 # compile assets
-RUN npm run deploy --prefix $ASSETS_DIR
-RUN mix phx.digest
+RUN mix assets.deploy
 
 # assemble release
 # changes to config/runtime.exs don't require recompiling the code
